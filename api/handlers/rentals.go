@@ -26,6 +26,10 @@ type Catalog struct {
 	Overview      string  `json:"overview,omitempty"`
 }
 
+// FixedMoviePrice is the price shown for every movie returned by the
+// catalog, overriding whatever price is stored in the catalog service.
+const FixedMoviePrice = 100.0
+
 func GetRentalsWithCatalogInfo(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	catalog, err := getCatalog(ctx)
@@ -88,6 +92,10 @@ func getCatalog(ctx context.Context) ([]Catalog, error) {
 	catalog := []Catalog{}
 	if err := json.Unmarshal(resp, &catalog); err != nil {
 		return nil, fmt.Errorf("error unmarshalling catalog: %v", err)
+	}
+
+	for i := range catalog {
+		catalog[i].Price = FixedMoviePrice
 	}
 
 	return catalog, nil
