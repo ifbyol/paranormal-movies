@@ -1,3 +1,4 @@
 tests/playwright-report
 tests/test-results
 .DS_Store
+.goroot/
